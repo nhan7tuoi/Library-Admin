@@ -2,7 +2,7 @@ import axios from "axios";
 import { clearLocalStorage } from "../utils";
 
 export const api = axios.create({
-    baseURL: 'http://localhost:6001/api/v1',
+    baseURL: 'http://47.129.185.35:3000/api/v1',
     timeout: 60000,
     headers: {
         'Content-Type': 'application/json',
