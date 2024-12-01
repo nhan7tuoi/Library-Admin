@@ -75,7 +75,7 @@ const Books = () => {
       )
     },
     {
-      title: 'Hành động',
+      title: 'Chức năng',
       key: 'action',
       render: (text, record) => (
         <Space size="middle">
@@ -96,6 +96,7 @@ const Books = () => {
               state: {
                 data: {
                   bookId: record._id,
+                  pdfLink: record.pdfLink,
                 }
               }
             })

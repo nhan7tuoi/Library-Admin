@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { _banUser, _getUserPage, _getUsers } from "./apis";
-import { Button, Col, ConfigProvider, Pagination, Space, Table } from 'antd';
+import { Button, Col, ConfigProvider, Pagination, Popconfirm, Space, Table } from 'antd';
 import { CCol, CRow, useColorModes } from "@coreui/react";
 import Search from "antd/es/transfer/search";
 import { formatDate } from "../../utils";
@@ -71,17 +71,31 @@ const Users = () => {
       key:'email',
     },
     {
-      title:"Hành động",
+      title:"Chức năng",
       render: (value, item) => (
         <Space>
           {item.status === "active" ? (
-            <Button onClick={()=>{handleToggleStatus(item._id,item.status)}} type="primary" danger>
+            <Popconfirm
+            title="Bạn có chắc chắn muốn khóa tài khoản này?"
+            onConfirm={() => handleToggleStatus(item._id, item.status)}
+            okText="Có"
+            cancelText="Không"
+          >
+            <Button danger>
               Khóa
             </Button>
+          </Popconfirm>
           ) : (
-            <Button onClick={()=>{handleToggleStatus(item._id,item.status)}} type="primary">
+            <Popconfirm
+            title="Bạn có chắc chắn muốn mở khóa tài khoản này?"
+            onConfirm={() => handleToggleStatus(item._id, item.status)}
+            okText="Có"
+            cancelText="Không"
+          >
+            <Button type="primary">
               Mở khóa
             </Button>
+          </Popconfirm>
           )}
         </Space>
       ),
@@ -105,13 +119,17 @@ const Users = () => {
   };
 
   const handleToggleStatus = async (userId, currentStatus) => {
-    await _banUser(userId);
+    try {
+      await _banUser(userId);
     setUsers(users.map((u) => {
       if (u._id === userId) {
         return { ...u, status: currentStatus === "active" ? "banned" : "active" };
       }
       return u;
     }));
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handlePageChange = (page) => {

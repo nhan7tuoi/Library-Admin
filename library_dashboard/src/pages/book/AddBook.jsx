@@ -10,6 +10,7 @@ const AddBook = () => {
   const navigate = useNavigate();
   const [genres, setGenres] = useState([]);
   const [majors, setMajors] = useState([]);
+  const currentYear = new Date().getFullYear();
   const [formData, setFormData] = useState({
     title: "",
     author: "",
@@ -73,6 +74,9 @@ const AddBook = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!validateForm()) {
+      return;
+    }
     if (!selectedPdfFile || !selectedImageFile) {
       openNotification(true,"Vui lòng chọn file PDF và ảnh!","Lỗi tải lên")();
       return;
@@ -100,6 +104,7 @@ const AddBook = () => {
               bookId: response.data.book._id,
               title: response.data.book.title,
               pdfLink: response.data.book.pdfLink,
+              page: response.data.book.pageNumber,
             },
           },
         });
@@ -148,6 +153,53 @@ const AddBook = () => {
     setIsVisible(false);
   };
 
+  const isValidYear = (year) => {
+    const yearNumber = Number(year);
+    return yearNumber >= 1900 && yearNumber <= currentYear;
+  };
+
+
+  const validateForm = () => {
+    //từng lỗi
+    if (!formData.title) {
+      openNotification(true,"Vui lòng nhập tiêu đề sách!","Lỗi")();
+      return false;
+    }
+    if (!formData.author) {
+      openNotification(true,"Vui lòng nhập tác giả!","Lỗi")();
+      return false;
+    }
+    if (!formData.publisher) {
+      openNotification(true,"Vui lòng nhập nhà xuất bản!","Lỗi")();
+      return false;
+    }
+    if (!formData.yob) {
+      openNotification(true,"Vui lòng nhập năm xuất bản!","Lỗi")();
+      return false;
+    }
+    if (!isValidYear(formData.yob)) {
+      openNotification(true,"Năm xuất bản không hợp lệ! Phải là từ 1000 - năm hiện tại","Lỗi")();
+      return false;
+    }
+    if (!formData.genre) {
+      openNotification(true,"Vui lòng chọn thể loại!","Lỗi")();
+      return false;
+    }
+    if (!formData.majors) {
+      openNotification(true,"Vui lòng chọn chuyên ngành!","Lỗi")();
+      return false;
+    }
+    if (!selectedPdfFile) {
+      openNotification(true,"Vui lòng chọn file PDF!","Lỗi")();
+      return false;
+    }
+    if (!selectedImageFile) {
+      openNotification(true,"Vui lòng chọn ảnh bìa!","Lỗi")();
+      return false;
+    }
+    return true;
+  }
+
   return (
     <>
       <Modal 
@@ -184,7 +236,9 @@ const AddBook = () => {
                   value={formData.title}
                   onChange={handleInputChange}
                   placeholder="Nhập tên sách"
-                  required
+                  valid={formData.title.length > 0}
+                  invalid={formData.title.length === 0}
+                  
                 />
               </CCol>
             </CRow>
@@ -198,7 +252,9 @@ const AddBook = () => {
                   value={formData.author}
                   onChange={handleInputChange}
                   placeholder="Nhập tên tác giả"
-                  required
+                  valid={formData.author.length > 0}
+                  invalid={formData.author.length === 0}
+                  
                 />
               </CCol>
             </CRow>
@@ -212,7 +268,9 @@ const AddBook = () => {
                   value={formData.publisher}
                   onChange={handleInputChange}
                   placeholder="Nhập tên nhà xuất bản"
-                  required
+                  valid={formData.publisher.length > 0}
+                  invalid={formData.publisher.length === 0}
+                  
                 />
               </CCol>
             </CRow>
@@ -223,12 +281,13 @@ const AddBook = () => {
                 <CFormInput
                   type="number"
                   name="yob"
-                  min="1900"
-                  max="2099"
+                  min="1000"
+                  max={currentYear}
                   value={formData.yob}
                   onChange={handleInputChange}
                   placeholder="Nhập năm xuất bản"
-                  required
+                  valid={isValidYear(formData.yob)}
+                  invalid={!isValidYear(formData.yob)}
                 />
               </CCol>
             </CRow>
@@ -240,7 +299,7 @@ const AddBook = () => {
                   type="file"
                   accept="application/pdf"
                   onChange={handleFilePdfChange}
-                  required
+                  
                   className="form-control"
                 />
               </CCol>
@@ -253,7 +312,7 @@ const AddBook = () => {
                   name="genre"
                   value={formData.genre}
                   onChange={(e) => handleGenreChange(e.target.value)}
-                  required
+                  
                 >
                   <option value="" disabled>
                     Chọn thể loại

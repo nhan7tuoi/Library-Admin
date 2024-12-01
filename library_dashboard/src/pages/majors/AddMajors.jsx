@@ -87,7 +87,7 @@ const AddMajors = () => {
                     </CCol>
                     <div style={{height:30}}/>
                     <CCol xs="auto">
-                        <Button onClick={handleCreateMajor} type="primary" className="px-4 py-2 text-dark font-medium rounded disabled-opacity-50">
+                        <Button disabled onClick={handleCreateMajor} type="primary" className="px-4 py-2 text-dark font-medium rounded disabled-opacity-50">
                         <span className="text-base text-white">Thêm chuyên ngành</span>
                         </Button>
                     </CCol>

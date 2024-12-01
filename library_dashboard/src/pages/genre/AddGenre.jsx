@@ -49,7 +49,9 @@ const AddGenrere = () => {
             const res = await _createGenre(genre.name);
             if(res.data){
                 setGenres([...genres,res.data]);
-                setGenre({});
+                setGenre({
+                    name: ""
+                });
                 setLoading(false);
                 openNotification(true,"Thể loại đã được thêm thành công!","Thành công")();
             }
@@ -90,7 +92,7 @@ const AddGenrere = () => {
                     </CCol>
                     <div style={{height:30}}/>
                     <CCol xs="auto">
-                        <Button onClick={handleAddGenre} type="primary" className="px-4 py-2 text-dark font-medium rounded disabled-opacity-50">
+                        <Button disabled onClick={handleAddGenre} type="primary" className="px-4 py-2 text-dark font-medium rounded disabled-opacity-50">
                         <span className="text-base text-white">Thêm thể loại</span>
                         </Button>
                     </CCol>

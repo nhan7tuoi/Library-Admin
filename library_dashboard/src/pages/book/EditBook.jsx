@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { CButton, CForm, CFormInput, CFormSelect, CCol, CRow, CCard, CCardBody, CSpinner } from '@coreui/react';
 import { Button, message, notification, Spin } from "antd"; // Keep Ant Design message for notifications
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { _createBook, _getBook, _getBookById, _getGenres, _getMajors } from "./apis";
+import { _createBook, _getBook, _getBookById, _getGenres, _getMajors, _updateBook } from "./apis";
 import Loading from "../../components/Loading";
 
 
@@ -26,6 +26,10 @@ const EditBook = () => {
   const [loading, setLoading] = useState(false);
   const [existingImageUrl, setExistingImageUrl] = useState("");
   const [api, contextHolder] = notification.useNotification();
+  const bookId = data.bookId;
+  const pdfLink = data.pdfLink;
+  console.log(data);
+  const currentYear = new Date().getFullYear();
 
   useEffect(() => {
     getBook(data.bookId);
@@ -45,7 +49,6 @@ const EditBook = () => {
 
   const getBook = async (id) => {
     const response = await _getBookById(id);
-    console.log(response.data);
     setFormData({
         title: response.data.title,
         author: response.data.author,
@@ -54,7 +57,6 @@ const EditBook = () => {
         yob: response.data.yob,
         publisher: response.data.publisher,
     });
-    setSelectedPdfFile(response.data.pdfLink);
     setExistingImageUrl(response.data.image);
     };
 
@@ -91,35 +93,37 @@ const EditBook = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!selectedPdfFile || !selectedImageFile) {
-      message.error("Bạn cần tải lên cả file PDF và ảnh bìa!");
+    if (!validateForm()) {
       return;
     }
 
     const data = new FormData();
+    data.append("bookId", bookId);
     data.append("title", formData.title);
     data.append("author", formData.author);
     data.append("genre", formData.genre);
     data.append("majors", formData.majors); 
-    data.append("pdf", selectedPdfFile);
-    data.append("image", selectedImageFile); 
+    data.append("yob", formData.yob);
+    data.append("publisher", formData.publisher);
+
+    
+    if(selectedImageFile !== null){
+      data.append("image", selectedImageFile); 
+    }
+
+    //xem data trong formdata
+    for (var pair of data.entries()) {
+      console.log(pair[0] + ", " + pair[1]);
+    }
 
     setLoading(true); // Set loading state to true
     try {
-      const response = await _createBook(data);
-      console.log(response.message);
-      console.log(response.data._id);
-      if (response.message === "add_chapter") {
-        navigate("/books/add-chapter", {
-          state: {
-            data: {
-              bookId: response.data._id,
-              title: response.data.title,
-              startPage: response.data.startPage,
-              pdfLink: response.data.pdfLink,
-            },
-          },
-        });
+      const response = await _updateBook(data);
+      if(response.data.error){
+        openNotification(true,response.data.message
+          ,"Lỗi")();
+        setLoading(false);
+
       } else {
         openNotification(true,"Sách đã được cập nhật thành công!","Thành công")();
         setFormData({
@@ -130,7 +134,6 @@ const EditBook = () => {
           yob: "",
           publisher: "",
         });
-        setSelectedPdfFile(null);
         setSelectedImageFile(null);
       }
     } catch (error) {
@@ -147,6 +150,44 @@ const EditBook = () => {
       showProgress: true,
       pauseOnHover,
     });
+  };
+
+  const validateForm = () => {
+    //từng lỗi
+    if (!formData.title) {
+      openNotification(true,"Vui lòng nhập tiêu đề sách!","Lỗi")();
+      return false;
+    }
+    if (!formData.author) {
+      openNotification(true,"Vui lòng nhập tác giả!","Lỗi")();
+      return false;
+    }
+    if (!formData.publisher) {
+      openNotification(true,"Vui lòng nhập nhà xuất bản!","Lỗi")();
+      return false;
+    }
+    if (!formData.yob) {
+      openNotification(true,"Vui lòng nhập năm xuất bản!","Lỗi")();
+      return false;
+    }
+    if (!isValidYear(formData.yob)) {
+      openNotification(true,"Năm xuất bản không hợp lệ! Phải là từ 1000 - năm hiện tại","Lỗi")();
+      return false;
+    }
+    if (!formData.genre) {
+      openNotification(true,"Vui lòng chọn thể loại!","Lỗi")();
+      return false;
+    }
+    if (!formData.majors) {
+      openNotification(true,"Vui lòng chọn chuyên ngành!","Lỗi")();
+      return false;
+    }
+    return true;
+  }
+
+  const isValidYear = (year) => {
+    const yearNumber = Number(year);
+    return yearNumber >= 1900 && yearNumber <= currentYear;
   };
 
   return (
@@ -172,7 +213,7 @@ const EditBook = () => {
                     data: {
                       bookId: data.bookId,
                       title: formData.title,
-                      pdfLink: selectedPdfFile,
+                      pdfLink: pdfLink,
                     },
                   },
                 });
@@ -240,7 +281,7 @@ const EditBook = () => {
               </CCol>
             </CRow>
 
-            <CRow className="mb-3">
+            {/* <CRow className="mb-3">
               <CCol>
                 <label className="form-label fw-bold">PDF File: (Nếu muốn thay đổi thì chọn lại)</label>
                 <input
@@ -250,7 +291,7 @@ const EditBook = () => {
                   className="form-control"
                 />
               </CCol>
-            </CRow>
+            </CRow> */}
 
             <CRow className="mb-3">
               <CCol>

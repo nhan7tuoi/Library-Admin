@@ -78,6 +78,13 @@ const AddNotification = () => {
   };
 
   const handleSaveNotification = async () => {
+    if (!title || !content || !filterCondition || selectedData.length === 0) {
+      return api.open({
+        message: 'Vui lòng điền đầy đủ thông tin!',
+        description: 'Tiêu đề, nội dung, kiểu lọc và sách không được để trống!',
+        type: 'warning',
+      });
+    }
     setLoading(true);
     const formData = new FormData();
     formData.append('title', title);
@@ -113,7 +120,7 @@ const AddNotification = () => {
       if (response.data) {
         openNotification(true,notificationItem ? 'Thông báo đã được cập nhật thành công!' : 'Thông báo đã được thêm thành công!','Thành công')();
         setTimeout(() => {
-          window.location.href = '/notifications';
+          navigation.navigate('/#/notifications/list');
         }, 3000);
       }
     } catch (error) {

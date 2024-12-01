@@ -17,6 +17,14 @@ const _createBook = async (data) => {
         });
         return resonpse;
 }
+const _updateBook = async (data) => {
+    const resonpse = await api.post("/books/update-book", data,{
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        }
+        });
+        return resonpse;
+}
 
 const _createChapter = async (data) => {
     return await api.post('/book/chapter', data);
@@ -99,5 +107,6 @@ export {
     _deleteBook ,
     _getTopView,
     _getTopRating,
-    _deleteChapter
+    _deleteChapter,
+    _updateBook
 }

@@ -16,7 +16,7 @@ export default function AddChapterPage() {
   const location = useLocation();
   const { state } = location || {};
   const { data } = state || {};
-  console.log("a",data);
+  console.log(data.pdfLink);
   const bookId = useRef(data.bookId);
   const [chapters, setChapters] = useState([]);
   const [pdfFile, setPdfFile] = useState(data.pdfLink); 
@@ -53,7 +53,47 @@ export default function AddChapterPage() {
     }));
   };
 
+  const validateForm = () => {
+    if (formData.title === "") {
+      message.error("Vui lòng nhập tiêu đề chương.");
+      return false;
+    }
+    if (formData.startPage === 0) {
+      message.error("Vui lòng nhập trang bắt đầu.");
+      return false;
+    }
+    if (formData.endPage === 0) {
+      message.error("Vui lòng nhập trang kết thúc.");
+      return false;
+    }
+    if (formData.startPage >= formData.endPage) {
+      message.error("Trang bắt đầu phải nhỏ hơn trang kết thúc.");
+      return false;
+    }
+    if (formData.endPage > data.page) {
+      message.error("Trang kết thúc không được lớn hơn tổng số trang.");
+      return false;
+    }
+    if (formData.startPage < 0) {
+      message.error("Trang bắt đầu phải lớn hơn 0.");
+      return false;
+    }
+    if (formData.endPage < 0) {
+      message.error("Trang kết thúc phải lớn hơn 0.");
+      return false;
+    }
+    const lastChapter = chapters[chapters?.length - 1];
+    if (lastChapter && lastChapter.endPage >= formData.startPage) {
+      message.error("Trang bắt đầu phải lớn hơn trang kết thúc của chương trước.");
+      return false;
+    }
+    return true;
+  }
+
   const handleSubmit = async () => {
+    if (!validateForm()) {
+      return;
+    }
     setIsLoading(true);
     const data = new FormData();
     data.append("book", formData.book);
@@ -258,14 +298,20 @@ export default function AddChapterPage() {
             </Button>
             </CCol>
             <CCol md={3}>
-            <Button onClick={()=>{
-              handleFinish();
-            }}
-            type="primary"
-            style={{backgroundColor: '#52c41a', color: 'white'}} 
-            >
-              Hoàn thành
-            </Button>
+            <Popconfirm
+    title="Bạn đã nhập xong chương chưa?"
+    description="Bạn có chắc chắn muốn hoàn thành sách không?"
+    onConfirm={()=>{
+      handleFinish();
+    }}
+    onCancel={()=>{}}
+    okText="Có"
+    cancelText="Không"
+  >
+    <Button  style={{backgroundColor: '#52c41a', color: 'white'}}  type="primary" danger>
+      Hoàn Thành
+    </Button>
+  </Popconfirm>
             </CCol>
             </CRow>
           </Form.Item>
