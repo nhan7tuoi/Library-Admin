@@ -28,8 +28,9 @@ const EditBook = () => {
   const [api, contextHolder] = notification.useNotification();
   const bookId = data.bookId;
   const pdfLink = data.pdfLink;
-  console.log(data);
   const currentYear = new Date().getFullYear();
+  const [isMajor, setIsMajor] = useState(false);
+  const [isGenre, setIsGenre] = useState(false);
 
   useEffect(() => {
     getBook(data.bookId);
@@ -84,10 +85,12 @@ const EditBook = () => {
   };
 
   const handleGenreChange = (value) => {
+    setIsGenre(true);
     setFormData((prev) => ({ ...prev, genre: value }));
   };
 
   const handleMajorChange = (value) => {
+    setIsMajor(true);
     setFormData((prev) => ({ ...prev, majors: value }));
   };
 
@@ -97,12 +100,16 @@ const EditBook = () => {
       return;
     }
 
+    const genre = genres.find((genre) => genre.name === formData.genre);
+    const major = majors.find((major) => major.name === formData.majors);
+
+
     const data = new FormData();
     data.append("bookId", bookId);
     data.append("title", formData.title);
     data.append("author", formData.author);
-    data.append("genre", formData.genre);
-    data.append("majors", formData.majors); 
+    data.append("genre", genre._id);
+    data.append("majors", major._id); 
     data.append("yob", formData.yob);
     data.append("publisher", formData.publisher);
 
@@ -111,7 +118,6 @@ const EditBook = () => {
       data.append("image", selectedImageFile); 
     }
 
-    //xem data trong formdata
     for (var pair of data.entries()) {
       console.log(pair[0] + ", " + pair[1]);
     }
@@ -126,18 +132,10 @@ const EditBook = () => {
 
       } else {
         openNotification(true,"Sách đã được cập nhật thành công!","Thành công")();
-        setFormData({
-          title: "",
-          author: "",
-          genre: "",
-          majors: "",
-          yob: "",
-          publisher: "",
-        });
-        setSelectedImageFile(null);
       }
     } catch (error) {
-      openNotification(true,error.response.data.message,"Lỗi")();
+      console.error("Error:", error);
+      openNotification(true,"Cập nhật sách thất bại","Lỗi")();
       setLoading(false);
     } finally {
       setLoading(false);
@@ -306,7 +304,7 @@ const EditBook = () => {
                     Chọn thể loại
                   </option>
                   {genres.map((genre) => (
-                    <option key={genre._id} value={genre._id}>
+                    <option key={genre._id} value={genre.name}>
                       {genre.name}
                     </option>
                   ))}
@@ -326,7 +324,7 @@ const EditBook = () => {
                     Chọn chuyên ngành
                   </option>
                   {majors.map((major) => (
-                    <option key={major._id} value={major._id}>
+                    <option key={major._id} value={major.name}>
                       {major.name}
                     </option>
                   ))}

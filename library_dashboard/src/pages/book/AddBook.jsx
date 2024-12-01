@@ -145,7 +145,9 @@ const AddBook = () => {
     setIsVisible(false);
     navigate("/books/detail",{
       state: {
-        id: bookId,
+        data: {
+          bookId: bookId,
+        },
       },
     });
   };

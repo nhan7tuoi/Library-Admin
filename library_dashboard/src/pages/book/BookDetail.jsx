@@ -10,6 +10,7 @@ const BookDetail = () => {
     const { data } = state || {};
     const navigate = useNavigate();
     const [book, setBook] = useState({});
+    console.log("BookDetail -> book", data?.bookId);
 
     useEffect(() => {
         if (data?.bookId) {

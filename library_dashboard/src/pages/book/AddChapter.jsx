@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Form, Input, Button, List, Typography, message, Spin, notification, Popconfirm } from "antd";
+import { Form, Input, Button, List, Typography, message, Spin, notification, Popconfirm, Modal } from "antd";
 import "@react-pdf-viewer/core/lib/styles/index.css"; 
 import { Worker } from '@react-pdf-viewer/core';
 import { Viewer } from '@react-pdf-viewer/core';
@@ -23,6 +23,8 @@ export default function AddChapterPage() {
   const [numPages, setNumPages] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [api, contextHolder] = notification.useNotification();
+  const [isVisible, setIsVisible] = useState(false);
+
 
   useEffect(() => {
     fetchData();
@@ -135,6 +137,24 @@ export default function AddChapterPage() {
   const onDocumentLoadSuccess = ({ numPages }) => {
     setNumPages(numPages);
   };
+
+
+  const handleOk = () => {
+    setIsVisible(false);
+    console.log('a',bookId);
+    navigate("/books/detail",{
+      state: {
+        data: {
+          bookId: bookId.current
+        },
+      },
+    });
+  };
+  const handleCancel = () => {
+    setIsVisible(false);
+    navigate("/books/list");
+  };
+
   const renderToolbar = (Toolbar) => ( 
     <Toolbar> 
       {(slots) => { 
@@ -197,22 +217,17 @@ export default function AddChapterPage() {
   };
 
   const handleFinish = async () => {
-    const userConfirmed = window.confirm("Bạn đã chắc chắn nhập xong chương chưa?");
-  
-    if (userConfirmed) {
+
       try {
         setIsLoading(true);
         await _createSummary({ bookId: data.bookId, title: data.title });
         setIsLoading(false);
-        navigate("/books/list");
+        setIsVisible(true);
        message.success("Bạn đã tạo sách thành công!");
       } catch (error) {
         console.error("Error submitting form:", error);
         message.error("Đã xảy ra lỗi khi gửi yêu cầu.");
       }
-    } else {
-      message.info("Vui lòng nhập xong chương trước khi hoàn thành.");
-    }
   };
 
   const openNotification = (pauseOnHover,description,title) => () => {
@@ -226,6 +241,23 @@ export default function AddChapterPage() {
 
   return (
     <>
+    <Modal 
+      wrapStyle={{padding: "50px"}}
+      title="Thông báo"
+       open={isVisible}
+        onOk={handleOk}
+         onCancel={handleCancel}
+          footer={[
+            <Button key="back" onClick={handleCancel}>
+            Danh sách sách
+          </Button>,
+            <Button key="submit" type="primary" onClick={handleOk}>
+              Xem chi tiết
+            </Button>,
+          ]}
+         >
+        <p>Thêm sách thành công. Bạn có thể xem chi tiết sách đã thêm </p>
+      </Modal>
     {contextHolder}
     <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js">
     <div style={{ display: 'flex', padding: '20px' }}>
