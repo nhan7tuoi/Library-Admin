@@ -81,11 +81,11 @@ const navigation = [
         name:'Danh sách',
         to:'/genres/list'
       },
-      {
-        component:CNavItem,
-        name:'Thêm mới',
-        to:'/genres/add'
-      },
+      // {
+      //   component:CNavItem,
+      //   name:'Thêm mới',
+      //   to:'/genres/add'
+      // },
     ]
   },
   {
@@ -99,11 +99,11 @@ const navigation = [
         name:'Danh sách',
         to:'/majors/list'
       },
-      {
-        component:CNavItem,
-        name:'Thêm mới',
-        to:'/majors/add'
-      },
+      //{
+      //   component:CNavItem,
+      //   name:'Thêm mới',
+      //   to:'/majors/add'
+      // },
     ]
   },
   {
