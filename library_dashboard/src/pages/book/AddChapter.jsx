@@ -56,41 +56,46 @@ export default function AddChapterPage() {
   };
 
   const validateForm = () => {
+    const startPage = Number(formData.startPage);
+    const endPage = Number(formData.endPage);
+    const totalPages = Number(data.page);
+  
     if (formData.title === "") {
       message.error("Vui lòng nhập tiêu đề chương.");
       return false;
     }
-    if (formData.startPage === 0) {
-      message.error("Vui lòng nhập trang bắt đầu.");
+    if (isNaN(startPage) || startPage === 0) {
+      message.error("Vui lòng nhập trang bắt đầu hợp lệ.");
       return false;
     }
-    if (formData.endPage === 0) {
-      message.error("Vui lòng nhập trang kết thúc.");
+    if (isNaN(endPage) || endPage === 0) {
+      message.error("Vui lòng nhập trang kết thúc hợp lệ.");
       return false;
     }
-    if (formData.startPage >= formData.endPage) {
+    if (startPage >= endPage) {
       message.error("Trang bắt đầu phải nhỏ hơn trang kết thúc.");
       return false;
     }
-    if (formData.endPage > data.page) {
+    if (endPage > totalPages) {
       message.error("Trang kết thúc không được lớn hơn tổng số trang.");
       return false;
     }
-    if (formData.startPage < 0) {
+    if (startPage < 0) {
       message.error("Trang bắt đầu phải lớn hơn 0.");
       return false;
     }
-    if (formData.endPage < 0) {
+    if (endPage < 0) {
       message.error("Trang kết thúc phải lớn hơn 0.");
       return false;
     }
     const lastChapter = chapters[chapters?.length - 1];
-    if (lastChapter && lastChapter.endPage >= formData.startPage) {
+    if (lastChapter && Number(lastChapter.endPage) >= startPage) {
       message.error("Trang bắt đầu phải lớn hơn trang kết thúc của chương trước.");
       return false;
     }
     return true;
-  }
+  };
+  
 
   const handleSubmit = async () => {
     if (!validateForm()) {
