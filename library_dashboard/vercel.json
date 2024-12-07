@@ -1,5 +1,4 @@
-{ 
-    "feedback": false,
+{
     "rewrites": [
       {
         "source": "/(.*)",
