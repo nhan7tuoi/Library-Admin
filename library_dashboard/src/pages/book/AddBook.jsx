@@ -38,7 +38,11 @@ const AddBook = () => {
 
   const getMajors = async () => {
     const response = await _getMajors();
-    setMajors(response.data);
+  const updatedMajors = [
+    ...response.data,
+    { _id: null, name: 'Không thuộc khoa' },
+  ];
+  setMajors(updatedMajors);
   };
 
   const handleInputChange = (e) => {
@@ -86,11 +90,16 @@ const AddBook = () => {
     data.append("title", formData.title);
     data.append("author", formData.author);
     data.append("genre", formData.genre);
-    data.append("majors", formData.majors); 
+    data.append("majors", formData.majors === 'Không thuộc khoa' ? null : formData.majors); 
     data.append("publisher", formData.publisher);
     data.append("yob", formData.yob);
     data.append("pdf", selectedPdfFile);
     data.append("image", selectedImageFile); 
+
+    //log form data
+    for (var pair of data.entries()) {
+      console.log(pair[0] + ", " + pair[1]);
+    }
 
     setLoading(true);
     try {

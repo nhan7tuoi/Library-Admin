@@ -134,9 +134,7 @@ const getMajors = async() => {
 const handleGetAllSatistic = async() => {
   try {
         const date = new Date();
-  // const { monday, sunday } = getMondayAndSundayFromAnyDay(date);
-  const monday = new Date(2024, 11, 2);
-  const sunday = new Date(2024, 11, 8);
+  const { monday, sunday } = getMondayAndSundayFromAnyDay(date);
     const response1 = await _getStatisticsDashBoard({
       fromDate: monday,
       toDate: sunday,
