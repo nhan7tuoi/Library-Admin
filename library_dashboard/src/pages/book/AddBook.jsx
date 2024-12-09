@@ -188,7 +188,7 @@ const AddBook = () => {
       return false;
     }
     if (!formData.majors) {
-      openNotification(true,"Vui lòng chọn chuyên ngành!","Lỗi")();
+      openNotification(true,"Vui lòng chọn khoa!","Lỗi")();
       return false;
     }
     if (!selectedPdfFile) {
@@ -330,14 +330,14 @@ const AddBook = () => {
 
             <CRow className="mb-3">
               <CCol>
-                <label className="form-label fw-bold">Chuyên ngành</label>
+                <label className="form-label fw-bold">Khoa</label>
                 <CFormSelect
                   name="majors"
                   value={formData.majors}
                   onChange={(e) => handleMajorChange(e.target.value)}
                 >
                   <option value="" disabled>
-                    Chọn chuyên ngành
+                    Chọn khoa
                   </option>
                   {majors.map((major) => (
                     <option key={major._id} value={major._id}>

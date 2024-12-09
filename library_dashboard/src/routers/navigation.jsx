@@ -90,7 +90,7 @@ const navigation = [
   },
   {
     component:CNavGroup,
-    name:'Chuyên ngành',
+    name:'Khoa',
     to:'/majors',
     icon:<CIcon icon={cilPencil} customClassName="nav-icon"/>,
     items:[

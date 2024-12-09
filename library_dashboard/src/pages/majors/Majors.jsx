@@ -36,7 +36,7 @@ const Majors = () => {
             key: "id",
         },
         {
-            title: "Tên chuyên ngành",
+            title: "Tên khoa",
             dataIndex: "name",
             key: "name",
         }
@@ -79,7 +79,7 @@ const Majors = () => {
             title={()=>{
           return (
             <Col>
-              <h3>Danh sách chuyên ngành</h3>
+              <h3>Danh sách khoa</h3>
             </Col>
           )
         }}  dataSource={majors} columns={column} loading={loading} rowKey="id" pagination={{pageSize:5}}/>

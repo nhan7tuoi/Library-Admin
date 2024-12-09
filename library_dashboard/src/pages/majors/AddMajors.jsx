@@ -18,7 +18,7 @@ const AddMajors = () => {
             key: "id",
         },
         {
-            title: "Tên chuyên ngành",
+            title: "Tên khoa",
             dataIndex: "name",
             key: "name",
         }
@@ -50,11 +50,11 @@ const AddMajors = () => {
                 setMajors([...majors,res.data]);
                 setMajor({});
                 setLoading(false);
-                openNotification(true,"Chuyên ngành đã được thêm thành công!","Thành công")();
+                openNotification(true,"Khoa đã được thêm thành công!","Thành công")();
             }
         } catch (error) {
             setLoading(false);
-            openNotification(true,"Đã xảy ra lỗi khi thêm chuyên ngành!","Lỗi")();
+            openNotification(true,"Đã xảy ra lỗi khi thêm khoa!","Lỗi")();
         }
     }
 
@@ -75,12 +75,12 @@ const AddMajors = () => {
         <CRow>
             <CCol xs={12} md={5}>
                 <CCard className="mb-4">
-                <CCardHeader className='font-weight-bold h4'>Thêm mới chuyên ngành</CCardHeader>
+                <CCardHeader className='font-weight-bold h4'>Thêm mới khoa</CCardHeader>
                 <CCardBody>
                     <CCol>
                         <CFormInput
                         type="text"
-                        placeholder="Nhập tên chuyên ngành"
+                        placeholder="Nhập tên khoa"
                         value={major.name}
                         onChange={(e) => setMajor({ ...major, name: e.target.value })}
                         />
@@ -88,7 +88,7 @@ const AddMajors = () => {
                     <div style={{height:30}}/>
                     <CCol xs="auto">
                         <Button disabled onClick={handleCreateMajor} type="primary" className="px-4 py-2 text-dark font-medium rounded disabled-opacity-50">
-                        <span className="text-base text-white">Thêm chuyên ngành</span>
+                        <span className="text-base text-white">Thêm khoa</span>
                         </Button>
                     </CCol>
                 </CCardBody>
@@ -98,7 +98,7 @@ const AddMajors = () => {
             <CCol xs={12} md={7}>
                 <Table 
                 title={() => (
-                    <span className="font-weight-bold h4">Danh sách chuyên ngành</span>
+                    <span className="font-weight-bold h4">Danh sách khoa</span>
                 )}
                 scroll={
                     { y: 380 }

@@ -66,7 +66,7 @@ const Books = () => {
       key: 'pageNumber',
     },
     {
-      title: 'Chuyên ngành',
+      title: 'Khoa',
       key: 'majors',
       render: (text, record) => (
         <span>

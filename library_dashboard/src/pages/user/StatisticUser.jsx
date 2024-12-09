@@ -108,7 +108,7 @@ const StatisticUser = () => {
             key: 'email',
             },
             {
-            title: 'Chuyên ngành',
+            title: 'Khoa',
             dataIndex: 'majors',
             key: 'majors',
             },
@@ -158,7 +158,7 @@ const StatisticUser = () => {
             doc.setFontSize(14);
             doc.setFont("Roboto","normal");
             const exportDateRange = `Thống kê được lấy từ ${formatDate(startDate)} đến ${formatDate(endDate)}`;
-            const exportMajor = `Chuyên ngành: ${selectedMajors.name}`;
+            const exportMajor = `Khoa: ${selectedMajors.name}`;
             doc.text(exportDateRange, 40, 140);
             doc.text(exportMajor, 40, 160);
 
@@ -183,7 +183,7 @@ const StatisticUser = () => {
             doc.text("Bảng danh sách người dùng", xPosition + 40, 640); 
             autoTable(doc, {
                 startY: 660, 
-                head: [["Tên người dùng", "Email", "Chuyên ngành", "Trạng thái"]],
+                head: [["Tên người dùng", "Email", "Khoa", "Trạng thái"]],
                 body: statisticUser?.userList?.map((user) => [
                     user.name,
                     user.email,
@@ -235,7 +235,7 @@ const StatisticUser = () => {
             </CCol>
       
             <CCol xs="auto" className="d-flex align-items-center gap-2">
-              <CFormLabel htmlFor="genre-select" className="mb-0 text-base font-medium">Chuyên ngành:</CFormLabel>
+              <CFormLabel htmlFor="genre-select" className="mb-0 text-base font-medium">Khoa:</CFormLabel>
               <CDropdown>
                         <CDropdownToggle className='bg-primary' style={{justifyItems:'center',alignItems:'center',borderRadius:10}} caret={false}>
                           <p style={{

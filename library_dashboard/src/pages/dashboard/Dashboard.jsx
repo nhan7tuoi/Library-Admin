@@ -172,7 +172,7 @@ const columns = [
     key: 'name',
   },
   {
-    title:'Chuyên ngành',
+    title:'Khoa',
     dataIndex: 'majors',
     key: 'majors',
   },

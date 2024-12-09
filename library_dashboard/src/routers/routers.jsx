@@ -36,7 +36,7 @@ const routes = [
   {path:'/books/detail', name:'Chi tiết sách', element: BookDetail},
   {path:'/genres/list', name:'Thể loại', element: Genres},
   {path:'/genres/add', name:'Thêm thể loại', element: AddGenre},
-  {path:'/majors/list', name:'Ngành học', element: Majors},
+  {path:'/majors/list', name:'Khoa', element: Majors},
   {path:'/majors/add', name:'Thêm ngành học', element: AddMajor},
   {path:'/notifications/list', name:'Thông báo', element: Notifications},
   {path:'/notifications/add', name:'Thêm thông báo', element: AddNotification},

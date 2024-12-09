@@ -162,7 +162,7 @@ const StatisticBook = () => {
         doc.setFont("Roboto","normal");
         const exportDateRange = `Thống kê được lấy từ ${formatDate(startDate)} đến ${formatDate(endDate)}`;
         const exportLoaiThongKe = `Loại thống kê: Top ${limit} ${thongKe.title} `;
-        const exportGenre = `Chuyên ngành: ${selectedMajors ? majors.find((m) => m._id === selectedGenre).name : "Tất cả"}`;
+        const exportGenre = `Khoa: ${selectedMajors ? majors.find((m) => m._id === selectedGenre).name : "Tất cả"}`;
         doc.text(exportDateRange, 40, 140);
         doc.text(exportLoaiThongKe, 40, 160);
         doc.text(exportGenre, 40, 180);
@@ -187,7 +187,7 @@ const StatisticBook = () => {
             doc.text(exportNameTable, xPositionTable, 610); 
             autoTable(doc, {
                 startY: 630, 
-                head: [["Tên sách", "Tác giả", "Chuyên ngành", "Số trang",thongKe.id === 1 ? "Lượt xem" : "Đánh giá trung bình"]],
+                head: [["Tên sách", "Tác giả", "Khoa", "Số trang",thongKe.id === 1 ? "Lượt xem" : "Đánh giá trung bình"]],
                 body: statisticData.map((book) => [
                     book.title,
                     book.author,
@@ -243,7 +243,7 @@ const StatisticBook = () => {
             </CCol>
       
             <CCol xs="auto" className="d-flex align-items-center gap-2">
-              <CFormLabel htmlFor="genre-select" className="mb-0 text-base font-medium">Chuyên ngành:</CFormLabel>
+              <CFormLabel htmlFor="genre-select" className="mb-0 text-base font-medium">Khoa:</CFormLabel>
               <CFormSelect
                 id="genre-select"
                 className="w-40"
