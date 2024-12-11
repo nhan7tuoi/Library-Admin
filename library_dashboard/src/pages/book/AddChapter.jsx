@@ -89,8 +89,8 @@ export default function AddChapterPage() {
       return false;
     }
     const lastChapter = chapters[chapters?.length - 1];
-    if (lastChapter && Number(lastChapter.endPage) >= startPage) {
-      message.error("Trang bắt đầu phải lớn hơn trang kết thúc của chương trước.");
+    if (lastChapter && Number(lastChapter.endPage) > startPage) {
+      message.error("Trang bắt đầu phải lớn hơn hoặc bằng trang kết thúc của chương trước.");
       return false;
     }
     return true;
